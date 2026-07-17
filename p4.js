@@ -1,5 +1,7 @@
 /* ================= UI (daily.dev × Panda) ================= */
 let query='';
+let renderedIds = new Set();   // article ids currently painted (stale-while-revalidate)
+let forceRenderNext = false;   // an explicit user refresh should repaint immediately
 
 const ICONS = {
   spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.9 5.7L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.3z"/></svg>',
@@ -69,9 +71,9 @@ function selectTab(id){
   if(id.startsWith('coll:')){ S.tab='saved'; S.activeColl=id.slice(5); S.interest=null; }
   else if(id.startsWith('int:')){ S.tab='interest'; S.interest=id.slice(4); }
   else { S.tab=id; S.interest=null; }
-  saveState(); render(); window.scrollTo({top:0});
+  saveState(); render(); window.scrollTo({top:0}); hideNewPill();
   // "Latest" always pulls the freshest articles from the live sources.
-  if(id==='latest') fetchAll(false);
+  if(id==='latest'){ forceRenderNext=true; fetchAll(false); }
 }
 function sitem(t){
   const ic = t.dot ? `<span class="ic"><span class="tdot" style="background:${t.dot}"></span></span>` : `<span class="ic">${t.icon||''}</span>`;
@@ -324,6 +326,7 @@ function render(){
     feed.innerHTML=list.slice(0,120).map(a=>cardHTML(a)).join('');
   }
   wireCards('#feed');
+  renderedIds = currentFeedIds();
 }
 function renderBoard(){
   const feed=$('#feed');
@@ -342,6 +345,80 @@ function renderBoard(){
     </div>`;
   }).join('');
   wireCards('#feed');
+  renderedIds = currentFeedIds();
+}
+/* ---------- stale-while-revalidate: fresh data without disruptive reloads ---------- */
+// Override the engine's fetchAll (defined in p1.js). Same fetching logic, but it
+// NEVER rebuilds the feed list while feeds stream in — that mid-fetch rebuild was
+// what made the feed feel like it was "constantly refreshing" and kept bouncing
+// the scroll position. The repaint decision is deferred to onFetchComplete.
+async function fetchAll(quiet){
+  if(fetching) return; fetching=true;
+  const btn=$('#refreshBtn'); if(btn) btn.classList.add('spinning');
+  const active = SOURCES.filter(s=>!S.disabled.includes(s.id));
+  let done=0; const pool=6; const queue=[...active];
+  const worker=async()=>{
+    while(queue.length){
+      const src=queue.shift();
+      try{ const items=await fetchFeedItems(src); mergeArticles(items); feedHealth[src.id]={ok:true,count:items.length,at:Date.now()}; }
+      catch(e){ feedHealth[src.id]={ok:false,err:String(e&&e.message||e),at:Date.now()}; }
+      done++;
+      if(done%4===0||done===active.length){ if($('#feedmeta')) renderMeta(done, active.length); }  // status line only, no feed rebuild
+    }
+  };
+  await Promise.all(Array.from({length:pool}, worker));
+  const okCount=Object.values(feedHealth).filter(h=>h.ok).length;
+  NET_BLOCKED = okCount===0;
+  if(okCount>0){
+    S.cache=[...articles.values()].sort((a,b)=>b.ts-a.ts).slice(0,MAX_CACHE).map(a=>({...a, content:(a.content||'').slice(0,20000)}));
+    S.lastRefresh=Date.now(); saveState();
+  }
+  fetching=false; if(btn) btn.classList.remove('spinning');
+  onFetchComplete();
+}
+// Set of every relevant, non-hidden article id currently loaded. Tab- and
+// order-independent, so re-ranking or tab switches never count as "new" — only
+// genuinely new articles arriving from a fetch do.
+function currentFeedIds(){
+  const hidden=new Set(S.hidden), disabled=new Set(S.disabled), ids=new Set();
+  for(const a of articles.values()){
+    if(hidden.has(a.id)||disabled.has(a.src)) continue;
+    if(isRelevant(a)) ids.add(a.id);
+  }
+  return ids;
+}
+// Called once when a background/foreground fetch finishes. Never rebuilds the
+// feed under the user's scroll — only repaints when idle at the top, otherwise
+// buffers the new stories behind a tappable pill.
+function onFetchComplete(){
+  renderMeta();   // refresh the "updated Xm ago" status line only (no feed rebuild)
+  if(forceRenderNext){ forceRenderNext=false; hideNewPill(); render(); return; }
+  const now=currentFeedIds();
+  let fresh=0; now.forEach(id=>{ if(!renderedIds.has(id)) fresh++; });
+  if(fresh===0){ hideNewPill(); return; }
+  const overlayOpen = $('#readerOverlay').classList.contains('open') || $('#settingsOverlay').classList.contains('open');
+  const atTop = (window.scrollY||document.documentElement.scrollTop||0) < 60;
+  if(atTop && !overlayOpen){ hideNewPill(); render(); }   // seamless when they're idle at the top
+  else showNewPill(fresh);                                 // otherwise don't disturb their place
+}
+function initNewPill(){
+  if($('#newpill')) return;
+  const p=document.createElement('button');
+  p.id='newpill';
+  p.style.cssText='position:fixed;top:calc(var(--topbarH,60px) + 14px);left:50%;transform:translate(-50%,-16px);z-index:150;display:none;align-items:center;gap:7px;padding:9px 18px;border-radius:99px;background:var(--grad,#4338ca);color:#fff;border:none;font-size:13px;font-weight:800;letter-spacing:.01em;box-shadow:0 10px 28px rgba(67,56,202,.5);cursor:pointer;opacity:0;transition:opacity .2s ease,transform .2s ease';
+  p.onclick=()=>{ hideNewPill(); window.scrollTo({top:0,behavior:'smooth'}); render(); };
+  document.body.appendChild(p);
+}
+function showNewPill(n){
+  const p=$('#newpill'); if(!p) return;
+  p.innerHTML=`&#8593; ${n} new ${n===1?'story':'stories'} &middot; tap to update`;
+  p.style.display='inline-flex';
+  requestAnimationFrame(()=>{ p.style.opacity='1'; p.style.transform='translate(-50%,0)'; });
+}
+function hideNewPill(){
+  const p=$('#newpill'); if(!p) return;
+  p.style.opacity='0'; p.style.transform='translate(-50%,-16px)';
+  setTimeout(()=>{ if(p.style.opacity==='0') p.style.display='none'; }, 220);
 }
 
 /* ---------- actions ---------- */
@@ -704,7 +781,7 @@ function initPullToRefresh(){
   window.addEventListener('touchend',async ()=>{
     if(!pulling) return; pulling=false;
     if(dist<THRESH){ hide(); return; }
-    busy=true;
+    busy=true; forceRenderNext=true;   // a deliberate pull should repaint immediately
     ind.style.opacity=1; ind.style.transform='translate(-50%,14px)';
     svg().style.transform='rotate(0deg)'; svg().style.animation='spin 1s linear infinite';
     txt().textContent='Refreshing…';
@@ -738,12 +815,13 @@ function init(){
   $('#viewGrid').onclick=()=>setView('grid');
   $('#viewList').onclick=()=>setView('list');
   $('#viewCols').onclick=()=>setView('columns');
-  $('#refreshBtn').onclick=()=>fetchAll(false);
+  $('#refreshBtn').onclick=()=>{ forceRenderNext=true; fetchAll(false); };
   $('#settingsBtn').onclick=openSettings;
   $('#tbFavs').onclick=()=>selectTab('favs');
   $('#tbSaved').onclick=()=>selectTab('saved');
   initSearch();
   initPullToRefresh();
+  initNewPill();
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'){ if($('#readerOverlay').classList.contains('open')) closeReader(); closeSettings(); closePop(); }
   });
