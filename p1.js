@@ -8,54 +8,56 @@
 /* ---------------- CONFIG: curated sources ---------------- */
 const SOURCES = [
   // ——— AI & tech ———
-  {id:'tc-ai',    name:'TechCrunch AI',        cat:'ai', url:'https://techcrunch.com/category/artificial-intelligence/feed/', tags:['ai-news','startups','tools']},
-  {id:'vb-ai',    name:'VentureBeat AI',       cat:'ai', url:'https://venturebeat.com/category/ai/feed/', tags:['ai-news','business','agents']},
-  {id:'verge-ai', name:'The Verge · AI',       cat:'ai', url:'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', tags:['ai-news','tools']},
-  {id:'mittr',    name:'MIT Technology Review',cat:'ai', url:'https://www.technologyreview.com/feed/', tags:['ai-news','research']},
-  {id:'openai',   name:'OpenAI News',          cat:'ai', url:'https://openai.com/blog/rss.xml', tags:['chatgpt','models']},
-  {id:'deepmind', name:'Google DeepMind',      cat:'ai', url:'https://deepmind.google/blog/rss.xml', tags:['models','research']},
-  {id:'googai',   name:'Google AI Blog',       cat:'ai', url:'https://blog.google/technology/ai/rss/', tags:['models','tools']},
-  {id:'hf',       name:'Hugging Face',         cat:'ai', url:'https://huggingface.co/blog/feed.xml', tags:['models','tutorials','tools']},
-  {id:'simonw',   name:'Simon Willison',       cat:'ai', url:'https://simonwillison.net/atom/everything/', tags:['claude','agents','tools','howto']},
-  {id:'mollick',  name:'One Useful Thing',     cat:'ai', url:'https://www.oneusefulthing.org/feed', tags:['howto','ai-work']},
-  {id:'latent',   name:'Latent Space',         cat:'ai', url:'https://www.latent.space/feed', tags:['agents','engineering','skills']},
-  {id:'every',    name:'Every',                cat:'ai', url:'https://every.to/feed.xml', tags:['ai-work','business','howto']},
-  {id:'bensbites',name:"Ben's Bites",          cat:'ai', url:'https://bensbites.beehiiv.com/feed', tags:['tools','startups','ai-money']},
-  {id:'mtp',      name:'MarkTechPost',         cat:'ai', url:'https://www.marktechpost.com/feed/', tags:['research','tutorials','models']},
-  {id:'decoder',  name:'The Decoder',          cat:'ai', url:'https://the-decoder.com/feed/', tags:['ai-news','models']},
-  {id:'zapier',   name:'Zapier Blog',          cat:'ai', url:'https://zapier.com/blog/feeds/latest/', tags:['automation','howto','tools']},
-  {id:'hn',       name:'Hacker News',          cat:'ai', url:'https://hnrss.org/frontpage', tags:['tech','tools','startups']},
-  {id:'wired-ai', name:'Wired · AI',           cat:'ai', url:'https://www.wired.com/feed/tag/ai/latest/rss', tags:['ai-news']},
-  {id:'kdn',      name:'KDnuggets',            cat:'ai', url:'https://www.kdnuggets.com/feed', tags:['tutorials','skills']},
-  {id:'tds',      name:'Towards Data Science', cat:'ai', url:'https://towardsdatascience.com/feed', tags:['tutorials','skills','agents']},
+  // tags = interest HINTS, applied only where the source is inherently single-topic.
+  // General news sources get none — their articles must earn relevance from content.
+  {id:'tc-ai',    name:'TechCrunch AI',        cat:'ai', url:'https://techcrunch.com/category/artificial-intelligence/feed/', tags:[]},
+  {id:'vb-ai',    name:'VentureBeat AI',       cat:'ai', url:'https://venturebeat.com/category/ai/feed/', tags:[]},
+  {id:'verge-ai', name:'The Verge · AI',       cat:'ai', url:'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', tags:[]},
+  {id:'mittr',    name:'MIT Technology Review',cat:'ai', url:'https://www.technologyreview.com/feed/', tags:[]},
+  {id:'openai',   name:'OpenAI News',          cat:'ai', url:'https://openai.com/blog/rss.xml', tags:['chatgpt-openai']},
+  {id:'deepmind', name:'Google DeepMind',      cat:'ai', url:'https://deepmind.google/blog/rss.xml', tags:['new-models']},
+  {id:'googai',   name:'Google AI Blog',       cat:'ai', url:'https://blog.google/technology/ai/rss/', tags:[]},
+  {id:'hf',       name:'Hugging Face',         cat:'ai', url:'https://huggingface.co/blog/feed.xml', tags:['new-models']},
+  {id:'simonw',   name:'Simon Willison',       cat:'ai', url:'https://simonwillison.net/atom/everything/', tags:[]},
+  {id:'mollick',  name:'One Useful Thing',     cat:'ai', url:'https://www.oneusefulthing.org/feed', tags:['business-with-ai']},
+  {id:'latent',   name:'Latent Space',         cat:'ai', url:'https://www.latent.space/feed', tags:['agents-workflows']},
+  {id:'every',    name:'Every',                cat:'ai', url:'https://every.to/feed.xml', tags:[]},
+  {id:'bensbites',name:"Ben's Bites",          cat:'ai', url:'https://bensbites.beehiiv.com/feed', tags:['tools-extensions']},
+  {id:'mtp',      name:'MarkTechPost',         cat:'ai', url:'https://www.marktechpost.com/feed/', tags:['new-models']},
+  {id:'decoder',  name:'The Decoder',          cat:'ai', url:'https://the-decoder.com/feed/', tags:[]},
+  {id:'zapier',   name:'Zapier Blog',          cat:'ai', url:'https://zapier.com/blog/feeds/latest/', tags:['automation']},
+  {id:'hn',       name:'Hacker News',          cat:'ai', url:'https://hnrss.org/frontpage', tags:[]},
+  {id:'wired-ai', name:'Wired · AI',           cat:'ai', url:'https://www.wired.com/feed/tag/ai/latest/rss', tags:[]},
+  {id:'kdn',      name:'KDnuggets',            cat:'ai', url:'https://www.kdnuggets.com/feed', tags:['tutorials-howtos']},
+  {id:'tds',      name:'Towards Data Science', cat:'ai', url:'https://towardsdatascience.com/feed', tags:['tutorials-howtos']},
   // ——— health & wellness ———
-  {id:'wg',       name:'Well+Good',            cat:'health', url:'https://www.wellandgood.com/feed/', tags:['wellness','fitness']},
-  {id:'mbg',      name:'mindbodygreen',        cat:'health', url:'https://www.mindbodygreen.com/rss', tags:['wellness','supplements','holistic']},
-  {id:'draxe',    name:'Dr. Axe',              cat:'health', url:'https://draxe.com/feed/', tags:['holistic','herbs','nutrition']},
-  {id:'wm',       name:'Wellness Mama',        cat:'health', url:'https://wellnessmama.com/feed/', tags:['holistic','remedies','recipes']},
-  {id:'mda',      name:"Mark's Daily Apple",   cat:'health', url:'https://www.marksdailyapple.com/feed/', tags:['nutrition','fitness']},
-  {id:'kresser',  name:'Chris Kresser',        cat:'health', url:'https://chriskresser.com/feed/', tags:['functional-med','nutrition']},
-  {id:'nf',       name:'NutritionFacts.org',   cat:'health', url:'https://nutritionfacts.org/feed/', tags:['nutrition','evidence']},
-  {id:'sd-nut',   name:'ScienceDaily Nutrition',cat:'health', url:'https://www.sciencedaily.com/rss/health_medicine/nutrition.xml', tags:['nutrition','research']},
-  {id:'sd-fit',   name:'ScienceDaily Fitness', cat:'health', url:'https://www.sciencedaily.com/rss/health_medicine/fitness.xml', tags:['fitness','research']},
-  {id:'bm',       name:'Breaking Muscle',      cat:'health', url:'https://breakingmuscle.com/feed/', tags:['fitness','workouts']},
-  {id:'mf',       name:'Muscle & Fitness',     cat:'health', url:'https://www.muscleandfitness.com/feed/', tags:['workouts','abs']},
-  {id:'bg',       name:'Ben Greenfield Life',  cat:'health', url:'https://bengreenfieldlife.com/feed/', tags:['biohacking','supplements','nootropics']},
-  {id:'fitt',     name:'Fitt Insider',         cat:'health', url:'https://insider.fitt.co/feed/', tags:['wellness-startups','health-tech']},
-  {id:'mommyp',   name:'Mommypotamus',         cat:'health', url:'https://mommypotamus.com/feed/', tags:['herbs','remedies','natural']},
-  {id:'fff',      name:'Fit Foodie Finds',     cat:'health', url:'https://fitfoodiefinds.com/feed/', tags:['recipes','protein','meal-prep']},
-  {id:'skinny',   name:'Skinnytaste',          cat:'health', url:'https://www.skinnytaste.com/feed/', tags:['recipes','meal-prep']},
-  {id:'chalk',    name:'The Chalkboard',       cat:'health', url:'https://thechalkboardmag.com/feed/', tags:['wellness','holistic']},
-  {id:'noot',     name:'Nootropics Expert',    cat:'health', url:'https://nootropicsexpert.com/feed/', tags:['nootropics','supplements']},
+  {id:'wg',       name:'Well+Good',            cat:'health', url:'https://www.wellandgood.com/feed/', tags:[]},
+  {id:'mbg',      name:'mindbodygreen',        cat:'health', url:'https://www.mindbodygreen.com/rss', tags:[]},
+  {id:'draxe',    name:'Dr. Axe',              cat:'health', url:'https://draxe.com/feed/', tags:['food-herb-benefits']},
+  {id:'wm',       name:'Wellness Mama',        cat:'health', url:'https://wellnessmama.com/feed/', tags:[]},
+  {id:'mda',      name:"Mark's Daily Apple",   cat:'health', url:'https://www.marksdailyapple.com/feed/', tags:[]},
+  {id:'kresser',  name:'Chris Kresser',        cat:'health', url:'https://chriskresser.com/feed/', tags:['functional-holistic']},
+  {id:'nf',       name:'NutritionFacts.org',   cat:'health', url:'https://nutritionfacts.org/feed/', tags:['food-herb-benefits']},
+  {id:'sd-nut',   name:'ScienceDaily Nutrition',cat:'health', url:'https://www.sciencedaily.com/rss/health_medicine/nutrition.xml', tags:['food-herb-benefits']},
+  {id:'sd-fit',   name:'ScienceDaily Fitness', cat:'health', url:'https://www.sciencedaily.com/rss/health_medicine/fitness.xml', tags:['core-ab-workouts']},
+  {id:'bm',       name:'Breaking Muscle',      cat:'health', url:'https://breakingmuscle.com/feed/', tags:['core-ab-workouts']},
+  {id:'mf',       name:'Muscle & Fitness',     cat:'health', url:'https://www.muscleandfitness.com/feed/', tags:['core-ab-workouts']},
+  {id:'bg',       name:'Ben Greenfield Life',  cat:'health', url:'https://bengreenfieldlife.com/feed/', tags:['health-hacks']},
+  {id:'fitt',     name:'Fitt Insider',         cat:'health', url:'https://insider.fitt.co/feed/', tags:['wellness-startups']},
+  {id:'mommyp',   name:'Mommypotamus',         cat:'health', url:'https://mommypotamus.com/feed/', tags:['herbal-remedies']},
+  {id:'fff',      name:'Fit Foodie Finds',     cat:'health', url:'https://fitfoodiefinds.com/feed/', tags:['high-protein-meal-prep']},
+  {id:'skinny',   name:'Skinnytaste',          cat:'health', url:'https://www.skinnytaste.com/feed/', tags:['high-protein-meal-prep']},
+  {id:'chalk',    name:'The Chalkboard',       cat:'health', url:'https://thechalkboardmag.com/feed/', tags:[]},
+  {id:'noot',     name:'Nootropics Expert',    cat:'health', url:'https://nootropicsexpert.com/feed/', tags:['nootropics']},
   // ——— parenting ———
-  {id:'lansbury', name:'Janet Lansbury',       cat:'parenting', url:'https://www.janetlansbury.com/feed/', tags:['respectful-parenting','emotional']},
-  {id:'sigmund',  name:'Hey Sigmund',          cat:'parenting', url:'https://www.heysigmund.com/feed/', tags:['child-anxiety','emotional']},
-  {id:'blj',      name:'Big Life Journal',     cat:'parenting', url:'https://biglifejournal.com/blogs/blog.atom', tags:['growth-mindset','confidence']},
-  {id:'motherly', name:'Motherly',             cat:'parenting', url:'https://www.mother.ly/feed/', tags:['parenting-news','emotional']},
-  {id:'simpleh',  name:'Simple Homeschool',    cat:'parenting', url:'https://simplehomeschool.net/feed/', tags:['homeschool']},
-  {id:'hsmom',    name:'The Homeschool Mom',   cat:'parenting', url:'https://www.thehomeschoolmom.com/feed/', tags:['homeschool']},
-  {id:'rll',      name:'Raising Lifelong Learners', cat:'parenting', url:'https://raisinglifelonglearners.com/feed/', tags:['homeschool','gifted']},
-  {id:'fatherly', name:'Fatherly',             cat:'parenting', url:'https://www.fatherly.com/feed', tags:['parenting-news','kids-skills']},
+  {id:'lansbury', name:'Janet Lansbury',       cat:'parenting', url:'https://www.janetlansbury.com/feed/', tags:['therapy-informed-parenting']},
+  {id:'sigmund',  name:'Hey Sigmund',          cat:'parenting', url:'https://www.heysigmund.com/feed/', tags:['emotional-regulation']},
+  {id:'blj',      name:'Big Life Journal',     cat:'parenting', url:'https://biglifejournal.com/blogs/blog.atom', tags:['mentally-strong-kids']},
+  {id:'motherly', name:'Motherly',             cat:'parenting', url:'https://www.mother.ly/feed/', tags:[]},
+  {id:'simpleh',  name:'Simple Homeschool',    cat:'parenting', url:'https://simplehomeschool.net/feed/', tags:['homeschooling']},
+  {id:'hsmom',    name:'The Homeschool Mom',   cat:'parenting', url:'https://www.thehomeschoolmom.com/feed/', tags:['homeschooling']},
+  {id:'rll',      name:'Raising Lifelong Learners', cat:'parenting', url:'https://raisinglifelonglearners.com/feed/', tags:['homeschooling']},
+  {id:'fatherly', name:'Fatherly',             cat:'parenting', url:'https://www.fatherly.com/feed', tags:[]},
 ];
 
 const CATS = {
@@ -64,40 +66,52 @@ const CATS = {
   parenting: {label:'Parenting',  cls:'parenting'},
 };
 
-/* Keyword → subtopic tagging (finer-grained personalization) */
-const TOPIC_RULES = [
-  [/\bclaude|anthropic\b/i,               'claude'],
-  [/\bchatgpt|openai|gpt-?\d/i,           'chatgpt'],
-  [/\bagent(s|ic)?\b/i,                   'agents'],
-  [/\bautomat(e|ion|ing)|workflow|zapier|n8n\b/i, 'automation'],
-  [/\bstartup|funding|raised|seed round|series [ab]\b/i, 'startups'],
-  [/\bhow to|guide|tutorial|step[- ]by[- ]step|beginner/i, 'howto'],
-  [/\bplugin|extension|mcp\b/i,           'plugins'],
-  [/\bprompt(ing|s)?\b/i,                 'prompting'],
-  [/\bmake money|monetiz|side hustle|income|revenue\b/i, 'ai-money'],
-  [/\bbuild(ing)? (a |an )?(app|website|site|saas)\b/i, 'ai-building'],
-  [/\bcontent creation|create content|youtube|newsletter\b/i, 'content'],
-  [/\bmodel|llm|benchmark\b/i,            'models'],
-  [/\bsupplement|vitamin|magnesium|creatine|omega/i, 'supplements'],
-  [/\bnootropic|cognitive|brain health|focus\b/i, 'nootropics'],
-  [/\bworkout|exercise|training|gym\b/i,  'workouts'],
-  [/\babs|core|plank|stomach|oblique/i,   'abs-core'],
-  [/\bherb(al|s)?|clove|turmeric|ginger|ashwagandha|remedy|remedies\b/i, 'herbs'],
-  [/\bchinese medicine|tcm|acupunctur|holistic|functional med|naturopath/i, 'holistic'],
-  [/\brecipe|meal prep|high[- ]protein|breakfast|dinner\b/i, 'recipes'],
-  [/\bgut|microbiome|digest/i,            'gut-health'],
-  [/\bsleep|circadian\b/i,                'sleep'],
-  [/\blongevity|anti[- ]aging\b/i,        'longevity'],
-  [/\bhomeschool|unschool|microschool|charter\b/i, 'homeschool'],
-  [/\bemotional regulation|big feelings|tantrum|meltdown|co[- ]?regulat/i, 'emotional-regulation'],
-  [/\bconfiden(ce|t)|resilien|mentally strong|growth mindset\b/i, 'confidence'],
-  [/\bshame|gentle parenting|respectful parenting|conscious parenting\b/i, 'gentle-parenting'],
-  [/\bkids? (and )?(money|finance)|allowance|financial literacy\b/i, 'kids-finance'],
-  [/\bscreen time|kids? (and )?ai|children.{0,12}ai\b/i, 'kids-and-ai'],
+/* ============ THE 33 INTERESTS — Christi's canonical taxonomy ============
+   This is the ONLY tag vocabulary. Every article is matched against these;
+   an article matching none of them is dropped from the feed (strict relevance).
+   cat gates prevent cross-bleed (e.g. "tools" in a health article ≠ AI tools). */
+const INTERESTS = [
+  // ——— AI & Building ———
+  {id:'new-models',            label:'New models',                 cat:'ai',        re:/\bmodel(s)?\b|\bllm\b|gpt-?\d|gemini|gemma|llama|claude \d|benchmark|parameter|frontier|weights|fine-?tun/i},
+  {id:'agents-workflows',      label:'Agents & workflows',         cat:'ai',        re:/\bagent(s|ic)?\b|multi-?agent|orchestrat|workflow/i},
+  {id:'claude-ecosystem',      label:'Claude ecosystem',           cat:'ai',        re:/\bclaude\b|anthropic|\bmcp\b/i},
+  {id:'chatgpt-openai',        label:'ChatGPT & OpenAI',           cat:'ai',        re:/chatgpt|openai|gpt-?\d|sam altman|copilot/i},
+  {id:'ai-skills-plugins',     label:'AI skills & plugins',        cat:'ai',        re:/\bplugin|extension|prompt(ing|s)?\b|\bmcp\b|ai skill/i},
+  {id:'tutorials-howtos',      label:'Tutorials & how-tos',        cat:'ai',        re:/\bhow to\b|tutorial|\bguide\b|step[- ]by[- ]step|explained|primer|walkthrough/i},
+  {id:'automation',            label:'Automation',                 cat:'ai',        re:/automat|zapier|\bn8n\b|webhook|no[- ]?code/i},
+  {id:'content-production',    label:'Content production',         cat:'ai',        re:/content (creation|production)|video[- ]generat|creator econom|youtube|newsletter|podcast/i},
+  {id:'build-apps-sites',      label:'Build apps & sites',         cat:'ai',        re:/\bdeveloper|coding|\bcodebase\b|build(ing|s)? (an? )?(app|site|website|product|saas)|software engineer|rewrit(e|ing)|vibe[- ]?cod/i},
+  {id:'tools-extensions',      label:'Tools & extensions',         cat:'ai',        re:/\btool(s|kit)?\b|browser extension|launch(es|ed)? (a |an )?(app|tool|product)/i},
+  {id:'ai-startups',           label:'AI startups',                cat:'ai',        re:/startup|raise(s|d)?\b|funding|valuation|seed round|series [ab]\b|unicorn|venture/i},
+  {id:'business-with-ai',      label:'Run a business with AI',     cat:'ai',        re:/enterprise|\bbusiness\b|compan(y|ies)|invest(ment|ing)?\b|\broi\b|adopt(ion|ing)/i},
+  {id:'money-with-ai',         label:'Make money with AI',         cat:'ai',        re:/make money|monetiz|side hustle|income|revenue|profit/i},
+  // ——— Health & Wellness ———
+  {id:'supplements',           label:'Supplements',                cat:'health',    re:/supplement|vitamin|collagen|creatine|magnesium|omega-?3|mineral|\bb12\b|\bd3\b|\bd2\b/i},
+  {id:'nootropics',            label:'Nootropics',                 cat:'health',    re:/nootropic|cognitive|\bbrain\b|\bfocus\b|memory/i},
+  {id:'wellness-startups',     label:'Wellness startups',          cat:'health',    re:/startup|funding|raise(s|d)?\b|launch(es|ed)?\b|\bbrand\b|compan(y|ies)/i},
+  {id:'health-tech',           label:'Health tech',                cat:'health',    re:/\btech\b|wearable|device|biomarker|diagnostic|\bapp\b|sensor|\btest(s|ing)?\b/i},
+  {id:'ai-for-health',         label:'AI for health',              cat:'health',    re:/\bai\b|artificial intelligence|algorithm|machine learning/i},
+  {id:'functional-holistic',   label:'Functional & holistic',      cat:'health',    re:/functional med|holistic|naturopath|integrative|root[- ]?cause|alternative medicine/i},
+  {id:'tcm',                   label:'Traditional Chinese medicine',cat:'health',   re:/chinese medicine|\btcm\b|acupunct|cooling (foods?|herbs?)|warming foods?|\bqi\b/i},
+  {id:'herbal-remedies',       label:'Herbal remedies',            cat:'health',    re:/\bherb|remedy|remedies|essential oil|tincture|clove|turmeric|ashwagandha|elderberry|\bdiy\b/i},
+  {id:'food-herb-benefits',    label:'Food & herb benefits',       cat:'health',    re:/nutrit|benefit|nutrient|good for you|superfood|antioxidant|\bfood(s)?\b/i},
+  {id:'core-ab-workouts',      label:'Core & ab workouts',         cat:'health',    re:/\babs?\b|\bcore\b|plank|oblique|stomach|workout|exercise|strength[- ]?train|resistance/i},
+  {id:'health-hacks',          label:'Health hacks',               cat:'health',    re:/\bhack|\btip(s)?\b|trick|routine|habit|boost|optimiz|improve|longevity|sleep|light|breath|stress/i},
+  {id:'high-protein-meal-prep',label:'High-protein meal prep',     cat:'health',    re:/protein|meal[- ]?prep|recipe|breakfast|dinner|lunch|snack|smoothie|no-cook/i},
+  // ——— Parenting ———
+  {id:'kids-ai-era',           label:'Kids in the AI era',         cat:'parenting', re:/\bai\b|screen|digital|social media|online|\btech\b/i},
+  {id:'emotional-regulation',  label:'Emotional regulation',       cat:'parenting', re:/emotion|anxiet|feeling|regulat|meltdown|tantrum|\bcalm\b|\bbrave\b|\bfear\b|stress|big feelings/i},
+  {id:'therapy-informed-parenting', label:'Therapy-informed parenting', cat:'parenting', re:/therap|psycholog|\bmental\b|\brie\b|respectful|attachment|trauma|development/i},
+  {id:'alternative-schools',   label:'Alternative schools',        cat:'parenting', re:/school|montessori|microschool|charter|education|classroom|recess/i},
+  {id:'homeschooling',         label:'Homeschooling',              cat:'parenting', re:/homeschool|unschool/i},
+  {id:'teaching-without-shame',label:'Teaching without shame',     cat:'parenting', re:/shame|punish|discipline|gentle|pressure|scold|without (pressure|force)/i},
+  {id:'mentally-strong-kids',  label:'Mentally strong kids',       cat:'parenting', re:/confiden|resilien|mentally strong|growth mindset|courage|\bbrave\b|self-esteem|\bgrit\b/i},
+  {id:'kids-money',            label:'Kids & money',               cat:'parenting', re:/\bmoney\b|allowance|financial literacy|\bfinance\b|saving/i},
 ];
+const INTEREST_LABELS = Object.fromEntries(INTERESTS.map(i=>[i.id,i.label]));
 
 /* Interest boosters Christi asked for explicitly — head start, pre-learned */
-const SEED_TAGS = {claude:2, agents:2, automation:1.5, howto:1.5, 'ai-money':1.5, supplements:1, herbs:1, 'abs-core':1, homeschool:1, 'emotional-regulation':1.5};
+const SEED_TAGS = {'claude-ecosystem':2, 'agents-workflows':2, automation:1.5, 'tutorials-howtos':1.5, 'money-with-ai':1.5, supplements:1, 'herbal-remedies':1, 'core-ab-workouts':1, homeschooling:1, 'emotional-regulation':1.5};
 
 const PROXIES = [
   {json:true,  wrap:u => 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(u)},
@@ -123,7 +137,7 @@ const DEFAULT_STATE = () => ({
   profile:{tags:Object.assign({},SEED_TAGS), sources:{}, words:{}, interactions:0},
   favs:[], hidden:[], collections:{}, library:{},   // library: snapshots of saved/faved articles
   read:{},                                          // id -> {opened, dwell}
-  disabled:[], view:'grid', tab:'foryou',
+  disabled:[], view:'grid', tab:'foryou', interest:null,
   cache:[], lastRefresh:0,
 });
 
@@ -173,12 +187,18 @@ function keywords(title){
     .filter(w=>w.length>3 && !STOP.has(w)))].slice(0,8);
 }
 function articleTags(a){
+  // Tags come ONLY from the 33-interest taxonomy. Source hints apply only for
+  // single-topic sources (a Nootropics Expert article IS about nootropics).
   const src = SOURCES.find(s=>s.id===a.src);
   const tags = new Set(src ? src.tags : []);
   const text = a.title + ' ' + (a.snippet||'');
-  for(const [re,tag] of TOPIC_RULES) if(re.test(text)) tags.add(tag);
+  for(const i of INTERESTS){
+    if(i.cat && i.cat!==a.cat) continue;      // category gate: no cross-bleed
+    if(i.re.test(text)) tags.add(i.id);
+  }
   return [...tags];
 }
+function isRelevant(a){ return (a.tags||[]).length>0; }   // strict relevance gate
 
 /* ---------------- fetching & parsing ---------------- */
 const feedHealth = {};   // srcId -> {ok, count, at, err}
