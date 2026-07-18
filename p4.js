@@ -347,6 +347,36 @@ function renderBoard(){
   wireCards('#feed');
   renderedIds = currentFeedIds();
 }
+/* ---------- proxy refresh: keep live fetching actually working ---------- */
+// Override the engine's fetchFeedItems (p1.js). The original proxy list went stale
+// (allorigins/corsproxy/codetabs stopped returning feeds), which is why "no new
+// articles" showed up. cors.eu.org is a reliable raw-XML passthrough with CORS:*;
+// rss2json is the JSON fallback. parseFeed/parseRss2Json still come from p1.js.
+const PROXIES2 = [
+  {json:false, wrap:u => 'https://cors.eu.org/' + u},
+  {json:true,  wrap:u => 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(u)},
+  {json:false, wrap:u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u)},
+  {json:false, wrap:u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u)},
+];
+async function fetchFeedItems(source){
+  let lastErr;
+  for(const p of PROXIES2){
+    try{
+      const ctl=new AbortController();
+      const to=setTimeout(()=>ctl.abort(), 11000);
+      const res=await fetch(p.wrap(source.url),{signal:ctl.signal});
+      clearTimeout(to);
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const text=await res.text();
+      if(!text || text.length<60) throw new Error('empty response');
+      const items = p.json ? parseRss2Json(text, source) : parseFeed(text, source);
+      if(!items.length) throw new Error('no items');
+      return items;
+    }catch(e){ lastErr=e; }
+  }
+  throw lastErr || new Error('all proxies failed');
+}
+
 /* ---------- stale-while-revalidate: fresh data without disruptive reloads ---------- */
 // Override the engine's fetchAll (defined in p1.js). Same fetching logic, but it
 // NEVER rebuilds the feed list while feeds stream in — that mid-fetch rebuild was
